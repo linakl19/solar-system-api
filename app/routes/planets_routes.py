@@ -24,8 +24,8 @@ def get_all_planets():
 def get_one_planet(planet_id):
     try:
         planet_id = int(planet_id)
-    except: 
-        TypeError ("Planet id can be only numbers!"), 400
+    except ValueError:
+        return {"message": "Planet id can be only numbers!"}, 400
     
     for planet in list_of_planets:
         if planet.id == planet_id:
@@ -35,6 +35,5 @@ def get_one_planet(planet_id):
                 description = planet.description,
                 diameter = planet.diameter 
             )
-        else:
-            return {"message": f"Planet {planet_id} was not found"}, 404
+    return {"message": f"Planet {planet_id} was not found"}, 404
     
