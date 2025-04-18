@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, abort, make_response
 from app.models.planets import list_of_planets
 
 # Create blueprint
@@ -22,18 +22,23 @@ def get_all_planets():
 # wave 2
 @planets_bp.get("/<planet_id>")
 def get_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+    return dict(
+            id = planet.id,
+            name = planet.name,
+            description = planet.description,
+            diameter = planet.diameter)
+
+def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except ValueError:
-        return {"message": "Planet id can be only numbers!"}, 400
-    
+        invalid = {"message": f"Planet id {planet_id} can be only numbers!"}
+        abort(make_response(invalid, 400))
+        
     for planet in list_of_planets:
         if planet.id == planet_id:
-            return dict(
-                id = planet.id,
-                name = planet.name,
-                description = planet.description,
-                diameter = planet.diameter 
-            )
-    return {"message": f"Planet {planet_id} was not found"}, 404
-    
+            return planet
+        
+    not_found = {"message": f"Planet {planet_id} was not found"}
+    abort(make_response(not_found, 404))
