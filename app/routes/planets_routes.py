@@ -33,7 +33,7 @@ def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except ValueError:
-        invalid = {"message": f"Planet id {planet_id} can be only numbers!"}
+        invalid = {"message": f"Planet id {planet_id} is invalid!"}
         abort(make_response(invalid, 400))
         
     for planet in list_of_planets:
