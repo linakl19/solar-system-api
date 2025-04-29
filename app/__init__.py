@@ -7,7 +7,7 @@ from .models import planets
 def create_app(test_config=None):
     app = Flask(__name__)
     
-    # configuration to connect to database
+    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development'
     
