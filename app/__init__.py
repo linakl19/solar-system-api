@@ -8,7 +8,7 @@ import os
 def create_app(config=None):
     app = Flask(__name__)
     
-    # configuration to connect to database
+    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_TEST_DATABASE_URI")
 
