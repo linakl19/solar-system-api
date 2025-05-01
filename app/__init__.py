@@ -2,14 +2,18 @@ from flask import Flask
 from app.routes.planets_routes import planets_bp
 from .db import db, migrate
 from .models import planets
+import os
 
 
-def create_app(test_config=None):
+def create_app(config=None):
     app = Flask(__name__)
     
     # configuration to connect to database
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_TEST_DATABASE_URI")
+
+    if config:
+        app.config.update(config)
     
     db.init_app(app)
     migrate.init_app(app, db)
