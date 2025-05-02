@@ -1,4 +1,3 @@
-#########
 from app.models.planets import Planet
 import pytest
 
@@ -75,61 +74,87 @@ def test_from_dict_with_extra_keys():
 
 
 #######
-# def test_to_dict_no_missing_data():
-#     # Arrange
-#     test_data = Book(id = 1,
-#                     title="Ocean Book",
-#                     description="watr 4evr")
+def test_to_dict_no_missing_data():
+    # Arrange
+    test_data = Planet(id = 1,
+                    name="Mercury",
+                    description="The smallest planet in our solar system",
+                    diameter=4879)
 
-#     # Act
-#     result = test_data.to_dict()
+    # Act
+    result = test_data.to_dict()
 
-#     # Assert
-#     assert len(result) == 3
-#     assert result["id"] == 1
-#     assert result["title"] == "Ocean Book"
-#     assert result["description"] == "watr 4evr"
+    # Assert
+    assert len(result) == 4
+    assert result["id"] == 1
+    assert result["name"] == "Mercury"
+    assert result["description"] == "The smallest planet in our solar system"
+    assert result["diameter"] == 4879
 
 
+# ask about missing id??
+def test_to_dict_missing_id():
+    # Arrange
+    test_data = Planet(name="Mercury",
+                description="The smallest planet in our solar system",
+                diameter=4879)
 
-# def test_to_dict_missing_id():
-#     # Arrange
-#     test_data = Book(title="Ocean Book",
-#                     description="watr 4evr")
+    # Act
+    result = test_data.to_dict()
 
-#     # Act
-#     result = test_data.to_dict()
+    # Assert
+    assert len(result) == 4
+    assert result["id"] is None
+    assert result["name"] == "Mercury"
+    assert result["description"] == "The smallest planet in our solar system"
+    assert result["diameter"] == 4879
 
-#     # Assert
-#     assert len(result) == 3
-#     assert result["id"] is None
-#     assert result["title"] == "Ocean Book"
-#     assert result["description"] == "watr 4evr"
+def test_to_dict_missing_name():
+    # Arrange
+    test_data = Planet(id = 1, 
+                    description="The smallest planet in our solar system",
+                    diameter=4879)
 
-# def test_to_dict_missing_title():
-#     # Arrange
-#     test_data = Book(id=1,
-#                     description="watr 4evr")
+    # Act
+    result = test_data.to_dict()
 
-#     # Act
-#     result = test_data.to_dict()
+    # Assert
+    assert len(result) == 4
+    assert result["id"] == 1
+    assert result["name"] is None
+    assert result["description"] == "The smallest planet in our solar system"
+    assert result["diameter"] == 4879
 
-#     # Assert
-#     assert len(result) == 3
-#     assert result["id"] == 1
-#     assert result["title"] is None
-#     assert result["description"] == "watr 4evr"
 
-# def test_to_dict_missing_description():
-#     # Arrange
-#     test_data = Book(id = 1,
-#                     title="Ocean Book")
+def test_to_dict_missing_description():
+    # Arrange
+    test_data = Planet(id = 1,
+                    name="Mercury",
+                    diameter=4879)
 
-#     # Act
-#     result = test_data.to_dict()
+    # Act
+    result = test_data.to_dict()
 
-#     # Assert
-#     assert len(result) == 3
-#     assert result["id"] == 1
-#     assert result["title"] == "Ocean Book"
-#     assert result["description"] is None
+    # Assert
+    assert len(result) == 4
+    assert result["id"] == 1
+    assert result["name"] == "Mercury"
+    assert result["description"] is None
+    assert result["diameter"] == 4879
+
+
+def test_to_dict_missing_diameter():
+    # Arrange
+    test_data = Planet(id = 1,
+                    name="Mercury",
+                    description="The smallest planet in our solar system")
+
+    # Act
+    result = test_data.to_dict()
+
+    # Assert
+    assert len(result) == 4
+    assert result["id"] == 1
+    assert result["name"] == "Mercury"
+    assert result["description"] == "The smallest planet in our solar system"
+    assert result["diameter"] is None

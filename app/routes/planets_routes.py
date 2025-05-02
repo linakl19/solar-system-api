@@ -30,19 +30,22 @@ def create_planet():
 def get_all_planets():
     query = db.select(Planet)
     
+    
+    name_param = request.args.get("name")
     description_param = request.args.get("description")
     diameter_param = request.args.get("diameter")
     
+    if name_param:
+        query = query.where(Planet.name.ilike(f"%{name_param}%"))
+        
     if description_param:
         query = query.where(Planet.description.ilike(f"%{description_param}%"))
     
     if diameter_param:
         # query = query.where(Planet.diameter == diameter_param)
         # query = query.where((Planet.diameter >= input - tolerance) & (Planet.diameter <= input + tolerance))
-        
         tolerance = 1000
         diameter = int(diameter_param)
-        
         query = query.where(Planet.diameter.between(diameter - tolerance, diameter + tolerance))
         
     query = query.order_by(Planet.id)
