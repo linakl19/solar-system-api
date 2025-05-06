@@ -1,22 +1,14 @@
 from flask import Blueprint, request, Response, abort, make_response
 from app.models.planets import Planet
 from ..db import db
-from app.routes.route_utilities import validate_models
+from app.routes.route_utilities import validate_models, create_model, get_models_with_filters
 
 bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
 
 @bp.post("")
 def create_planet():
     request_body = request.get_json()
-    try: 
-        new_planet = Planet.from_dict(request_body) 
-    except KeyError as error: 
-        response = {"message": f"Invalid request: missing {error.args[0]}"} 
-        abort(make_response(response, 400))
-
-    db.session.add(new_planet)
-    db.session.commit()
-    return new_planet.to_dict(), 201
+    return create_model(Planet, request_body)
 
 
 @bp.get("")

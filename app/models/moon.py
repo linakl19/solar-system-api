@@ -9,7 +9,7 @@ class Moon(db.Model):
     description: Mapped[str]
     discovered_at: Mapped[int]
     planet_id: Mapped[Optional[int]] = mapped_column(ForeignKey("planet.id"))
-    planet: Mapped[Optional["Planet"]] = relationship(back_populates="planets")
+    planet: Mapped[Optional["Planet"]] = relationship(back_populates="moons")
     
     
     def to_dict(self):
@@ -17,7 +17,8 @@ class Moon(db.Model):
             'id': self.id,
             'size': self.size,
             'description': self.description,
-            'discovered_at': self.discovered_at
+            'discovered_at': self.discovered_at,
+            'planet': self.planet.name if self.planet_id else None
             }
     
     @classmethod
@@ -25,5 +26,6 @@ class Moon(db.Model):
         return cls(
             size = planet_data["size"],
             description = planet_data["description"],
-            discovered_at = planet_data["discovered_at"]
+            discovered_at = planet_data["discovered_at"],
+            planet_id = planet_data.get("planet_id", None)
         )
