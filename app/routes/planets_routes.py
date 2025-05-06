@@ -3,7 +3,7 @@ from app.models.planets import Planet
 from ..db import db
 from app.routes.route_utilities import validate_models
 
-bp = Blueprint("bp", __name__, url_prefix="/planets")
+bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
 
 @bp.post("")
 def create_planet():
