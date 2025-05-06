@@ -59,6 +59,7 @@ def get_one_planet(planet_id):
     return planet.to_dict()
 
 
+
 # Endpoint to update one planet
 @bp.put("/<planet_id>")
 def update_one_planet(planet_id):
