@@ -205,3 +205,87 @@ def test_get_one_planet_invalid_id(client, two_saved_planets):
     # Assert
     assert response.status_code == 400
     assert response_body == {"message": "Planet with id (cat) is invalid"}
+
+
+def test_create_moon_with_planet(client, two_saved_planets):
+    # Arrange
+    test_data = {
+        "size": 3125,
+        "description": "Frozen surface with possible ocean beneath",
+        "discovered_at": 1610
+    }
+    # Act
+    response = client.post("/planets/1/moons", json=test_data)
+    response_body = response.get_json()
+    # Assert
+    assert response.status_code == 201
+    assert response_body == {
+        "description": "Frozen surface with possible ocean beneath",
+        "discovered_at": 1610,
+        "id": 1,
+        "planet": "Mercury",
+        "size": 3125
+    }
+
+def test_create_moon_with_nonexistant_planet(client):
+    # Arrange
+    test_data = {
+        "size": 3125,
+        "description": "Frozen surface with possible ocean beneath",
+        "discovered_at": 1610
+    }
+    # Act
+    response = client.post("/planets/1/moons", json=test_data)
+    response_body = response.get_json()
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"message":"Planet with id (1) not found"}
+
+
+def test_create_moons_with_bad_planet_id(client):
+    # Arrange
+    test_data = {
+        "size": 3125,
+        "description": "Frozen surface with possible ocean beneath",
+        "discovered_at": 1610
+    }
+    # Act
+    response = client.post("/planets/cat/moons", json=test_data)
+    response_body = response.get_json()
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {"message":"Planet with id (cat) is invalid"}
+
+
+def test_get_moons_by_planet_expects_one_moon(client, two_saved_planets, planet_with_two_moons):
+    # Act
+    response = client.get("/planets/1/moons")
+    response_body = response.get_json()
+    # Assert
+    assert response.status_code == 200
+    assert len(response_body) == 2
+    assert response_body == [
+        {
+            "id": 1,
+            "size": 3125,
+            "description": "Frozen surface with possible ocean beneath",
+            "discovered_at": 1610, 
+            "planet": "Mercury"
+        },
+        {
+            "id": 2,
+            "size": 1737,
+            "description": "Rocky surface with many craters",
+            "discovered_at": -4000, 
+            "planet": "Mercury"
+        }
+    ]
+
+def test_get_moons_by_planet_with_no_moons(client, two_saved_moons, two_saved_planets):
+    # Act
+    response = client.get("/planets/1/moons")
+    response_body = response.get_json()
+    # Assert
+    assert response.status_code == 200
+    assert len(response_body) == 0
+    assert response_body == []
