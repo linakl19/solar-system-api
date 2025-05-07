@@ -4,6 +4,7 @@ from app.db import db
 from flask.signals import request_finished
 from dotenv import load_dotenv
 import os
+from app.models.moon import Moon
 from app.models.planets import Planet
 
 
@@ -47,4 +48,41 @@ def two_saved_planets(app):
         diameter=12104)
     
     db.session.add_all([mercury, venus])
+    db.session.commit()
+
+
+@pytest.fixture
+def two_saved_moons(app):
+    # Arrange
+    europa = Moon(
+        size= 3125,
+        description= "Frozen surface with possible ocean beneath",
+        discovered_at= 1610,
+        planet = None
+    )
+    luna = Moon(
+        size= 1737,
+        description= "Rocky surface with many craters",
+        discovered_at= -4000,
+        planet = None
+    )
+    
+    db.session.add_all([europa, luna])
+    db.session.commit()
+
+@pytest.fixture
+def planet_with_two_moons(app, two_saved_planets):
+    europa_moon = Moon(
+        size= 3125,
+        description= "Frozen surface with possible ocean beneath",
+        discovered_at= 1610,
+        planet_id = 1
+    )
+    luna_moon = Moon(
+        size= 1737,
+        description= "Rocky surface with many craters",
+        discovered_at= -4000,
+        planet_id = 1
+    )
+    db.session.add_all([europa_moon, luna_moon])
     db.session.commit()
