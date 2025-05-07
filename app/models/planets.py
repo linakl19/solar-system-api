@@ -14,8 +14,10 @@ class Planet(db.Model):
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'diameter': self.diameter
+            'diameter': self.diameter,
+            'moons': [moon.to_dict() for moon in self.moons]
             }
+        
     
     @classmethod
     def from_dict(cls, planet_data):
