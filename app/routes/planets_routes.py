@@ -1,5 +1,6 @@
 from flask import Blueprint, request, Response, abort, make_response
 from app.models.planets import Planet
+from app.models.moon import Moon
 from ..db import db
 from app.routes.route_utilities import validate_models, create_model, get_models_with_filters
 
@@ -75,5 +76,21 @@ def delete_one_planet(planet_id):
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
+
+
+@bp.get("/<planet_id>/moons")
+def get_moons_by_planet(planet_id):
+    planet = validate_models(Planet, planet_id)
+    response = [book.to_dict() for book in planet.moons]
+    return response
+
+
+@bp.post("/<planet_id>/moons")
+def create_moon_with_planet(planet_id):
+    planet = validate_models(Planet, planet_id)
+    
+    request_body = request.get_json()
+    request_body["planet_id"] = planet.id
+    return create_model(Moon, request_body)
 
 
